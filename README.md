@@ -1,3 +1,13 @@
+## About This Fork
+
+This is a personal fork of the MX Player Morphe patches modified to **keep the main Video (Web Series & Movies) tab enabled** while continuing to block all ads, trackers, and extra online tabs.
+
+### Differences from Upstream
+* **Enabled:** Main **Video** tab (Web Series & Movies) and offline episode downloads.
+* **Disabled (kept stripped):** All pre-roll, mid-roll, pause, banner, and welcome ads; analytics & tracking SDKs; Live TV, Shorts (Fatafat), MX Tube, MX Games, and Bazaar.
+* **Note:** If switching from a pure-local build, clear MX Player's app data after installing so the bottom navigation bar refreshes.
+
+
 <div align="center">
 
 <img src="assets/icon.png" width="96" alt="GinArena Patch" />
