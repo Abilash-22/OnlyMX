@@ -1,3 +1,76 @@
+## 1.0.0 (2026-11-22)
+
+### ⚠ BREAKING CHANGES
+
+* GinArena Patch 2.0.0 expands coverage to the downloads-home promo strip and sponsored browser start-page tiles.
+
+### 🐛 Bug Fixes
+
+* **1dm:** auto-hydrate cloud Hosts & filters UI, speed up local rebuild, and keep task in Recents on Back ([87ebd7c](https://github.com/Abilash-22/OnlyMX/commit/87ebd7ca98defa4a431ceb613e3cdd2190bc1673))
+* **adguard:** rename patch so README anchors are unique ([2931863](https://github.com/Abilash-22/OnlyMX/commit/2931863d663c9b97b373eb556d018378e32cb0be))
+* **build:** declare buildPlayfyExtensionMpe for sourcesJar ([060f4d5](https://github.com/Abilash-22/OnlyMX/commit/060f4d57663a37e9291eb0a23ba748440bbcf2e5))
+* clean up Manager version-card metadata ([e65053a](https://github.com/Abilash-22/OnlyMX/commit/e65053a28c0b133bb6573b1f569cb8056650661d))
+* **cricfy:** add category pinning with viewport anchor and grid layout fix ([351d409](https://github.com/Abilash-22/OnlyMX/commit/351d40968364182c2b63089a140fe66db9c5a314))
+* **cricfy:** improve search and playback patch details ([4853980](https://github.com/Abilash-22/OnlyMX/commit/485398033e916b9267e3f17734021eea6137cc56))
+* **cricz,playz:** pin rows reorder without a refresh ([c9f5dbf](https://github.com/Abilash-22/OnlyMX/commit/c9f5dbfb0b875e038294a0254a551840836307f7))
+* **decompiler:** mark 4.12.0 as stable ([0c350fa](https://github.com/Abilash-22/OnlyMX/commit/0c350fa893e47b421c1d90179c422be87c50ad62))
+* make CRICFy patch safer by default ([db89a79](https://github.com/Abilash-22/OnlyMX/commit/db89a79fda9a9d8f4e3025170a3c492940ad8ace))
+* **mxplayer:** fix 1-tap Classic Themes and remove redundant Clean App Theme patch ([8024e90](https://github.com/Abilash-22/OnlyMX/commit/8024e903b4630f009a4eb09343fa7806ccaff2d6))
+* **mxplayer:** order supported versions oldest first so indexes show 3.4.1 ([0d4ba30](https://github.com/Abilash-22/OnlyMX/commit/0d4ba301bf1bc12f140b4036920bb7e158ca80e5))
+* **mxplayer:** target 3.4.1 only, fix playback heating, theme hang, and smoothness ([e5da880](https://github.com/Abilash-22/OnlyMX/commit/e5da880592e9741cde8f4d9f91b35b8ac8f80b63))
+* **onedm:** fix VerifyError crash in AdBlock j12 and harden startup lifecycle ([70f96ab](https://github.com/Abilash-22/OnlyMX/commit/70f96abfe82b5869cca951ebc35baed8d3c19ea6))
+* **player:** hide logos and limit CricFy to 7.4 ([9e2a949](https://github.com/Abilash-22/OnlyMX/commit/9e2a9495f8f382336dedb19c7390bb2c2f7426c0))
+* **player:** improve CricFy and PlayFy TV seekbar focus ([8267a2d](https://github.com/Abilash-22/OnlyMX/commit/8267a2dfb1f0c35390bc1bc89d944526e5c726bc))
+* **playfy:** add category pinning with AsyncListDiffer viewport anchor ([b5f1f4d](https://github.com/Abilash-22/OnlyMX/commit/b5f1f4d45e8e2cd41472fefcfa88491f6194e96f))
+* **playfy:** correct forced-update bypass branch ([d31ce97](https://github.com/Abilash-22/OnlyMX/commit/d31ce9766e4f33ba6544e2ae231835e15642e7ec))
+* **playfy:** handle space-padded content payloads ([464f8e2](https://github.com/Abilash-22/OnlyMX/commit/464f8e27f06c4314d7fe6f92178f3afcaeaa66e0))
+* **playfy:** preserve Android TV focus across notifyDataSetChanged reorders ([5369974](https://github.com/Abilash-22/OnlyMX/commit/5369974d8ff4adacacb05fa0d7867f773e84e8a2))
+* **playfy:** prevent Firebase Messaging startup crash ([be844c1](https://github.com/Abilash-22/OnlyMX/commit/be844c16e60d4aef32e1b87c41fed9e33293568f))
+* **playfy:** publish Playfy playback fix ([077715f](https://github.com/Abilash-22/OnlyMX/commit/077715f3ae18bf008dcb943236455f44f543d356))
+* **playfy:** restore playback and remove Telegram popup ([a113a99](https://github.com/Abilash-22/OnlyMX/commit/a113a99fcabc2db7bea4f4fc6bed469eaa92a36f))
+* **playfy:** stop leaving the splash spinner up on Android 13+ ([92382d6](https://github.com/Abilash-22/OnlyMX/commit/92382d6409f905787f63bc4b724dd9e83395ea14))
+* provide bytecode context for TV controls ([b0482d4](https://github.com/Abilash-22/OnlyMX/commit/b0482d4820165a043f9cab5661723777d658cf7a))
+* **readme:** verify every anchor against GitHub's own renderer ([8665d37](https://github.com/Abilash-22/OnlyMX/commit/8665d3786f3101f29b817cd45e3bbbc3bccbdc73))
+* restore Android TV player controls ([332d6f8](https://github.com/Abilash-22/OnlyMX/commit/332d6f85050503978fcad406d99c2fd90537dc22))
+* **sktech,crexify:** pin rows reorder without a refresh ([2617f5d](https://github.com/Abilash-22/OnlyMX/commit/2617f5da12cde82e346328ef94d314e104281ed6))
+* **wps,cricfy:** support WPS 26.11.1 only, harden MicroG patching, fix the CricFy strip ([da8e130](https://github.com/Abilash-22/OnlyMX/commit/da8e1307d94cc36a090613e4b24c969de5b50ce6)), closes [#56](https://github.com/Abilash-22/OnlyMX/issues/56)
+* **wps:** make the master switch the first card and name it clearly ([1bf6aea](https://github.com/Abilash-22/OnlyMX/commit/1bf6aeaf249b06584ad9d063b4ce587041b8321e))
+
+### ✨ New Features
+
+* **1dm:** harden cloud sync and patch resilience ([6972768](https://github.com/Abilash-22/OnlyMX/commit/6972768877540648c3df37cdbc3b17089616ce63))
+* add browser presets and one-time setup prompts ([4d35ea7](https://github.com/Abilash-22/OnlyMX/commit/4d35ea7328f1e9e31178e993f05058f849c44f92))
+* add CrexiFy TV 4.5 patches ([518ab2e](https://github.com/Abilash-22/OnlyMX/commit/518ab2ead18581084c50bf6f33fca4f46df02d9e))
+* add CRICFy TV 7.3 patch ([0070991](https://github.com/Abilash-22/OnlyMX/commit/0070991cc06cd600594a969abb1836f6a6f14e5d))
+* add GinArena Patch for 1DM 20.0 ([8c9f38c](https://github.com/Abilash-22/OnlyMX/commit/8c9f38ca5c741b4db5de12a9ee690337da643cac))
+* **adguard:** add AdGuard 4.15.2 premium unlock patch ([7aea27c](https://github.com/Abilash-22/OnlyMX/commit/7aea27cf345fad07dfcbd3c96c02f1558708967e))
+* **cricfy:** support 7.5 and drop 7.4 ([29d781b](https://github.com/Abilash-22/OnlyMX/commit/29d781b8d4f7696772c2a1509f865b7aeee1b809))
+* **cricfy:** suppress the CashRaven consent prompt ([79c5ad1](https://github.com/Abilash-22/OnlyMX/commit/79c5ad1a71545d304440be978978beb18b4e6e5d))
+* **cricz:** add Remove ads, telemetry & restrictions patch for CricZ TV 7.3 ([e512273](https://github.com/Abilash-22/OnlyMX/commit/e512273aaa9c200b198f843e9de84eb52adb2f8c))
+* **cricz:** add Remove ads, telemetry & restrictions patch for CricZ TV 7.3 ([a26de87](https://github.com/Abilash-22/OnlyMX/commit/a26de877deaacba93bf576c0e1c8e320ce417c16))
+* **daylio:** add experimental Daylio 1.71.1 support ([899ee03](https://github.com/Abilash-22/OnlyMX/commit/899ee038c7a38cee1543fcfa70c395a3a94a5ac4))
+* **daylio:** support 1.72.0 with promo, tracking and MicroG patches ([a4b8c8f](https://github.com/Abilash-22/OnlyMX/commit/a4b8c8f80612568ab815a03faa08f1a3a98082d9))
+* **decompiler:** add APK Decompiler 4.12.0 patch ([e9f48a1](https://github.com/Abilash-22/OnlyMX/commit/e9f48a1e32917ca1c69f38958dd74f5748f91227))
+* hide VPN promo strip and sponsored start-page tiles ([f9a1396](https://github.com/Abilash-22/OnlyMX/commit/f9a1396770868e947ed7ccff81de69ea5ab5c26b))
+* **mxplayer:** add MX Player 3.4.1, 3.4.0, and 3.3.1 patches ([e9ab673](https://github.com/Abilash-22/OnlyMX/commit/e9ab673314475e81b0a041464ac778401607766b))
+* **onedm:** add 1DM 20.0 cold-start, battery, cloud adblocker & userscript suite ([0cdb0c9](https://github.com/Abilash-22/OnlyMX/commit/0cdb0c9154b42218a2d2209032d980f707017e4f))
+* pin and arrange favourite categories across the TV apps ([1be7f71](https://github.com/Abilash-22/OnlyMX/commit/1be7f71e2aa36aa5fb031ac8392b8f2f1257ead4))
+* **playfy:** add Playfy TV 1.7 patch ([bda57f3](https://github.com/Abilash-22/OnlyMX/commit/bda57f3f4c1d2779b6f06de667f36c1056e078a2))
+* **playz:** add PlayZ TV 2.3.1 clean experience patch ([21a0a00](https://github.com/Abilash-22/OnlyMX/commit/21a0a0045bda3f3685d15653c72e7c8fbd17476d))
+* **sktech:** add SK Tech TV 2.7 clean-experience patch ([87bc9fb](https://github.com/Abilash-22/OnlyMX/commit/87bc9fb9b46205fff1c0f12cb0080b36e04086ca))
+* **wps:** add WPS Office 26.11.0 premium and MicroG sign-in patches ([37de91d](https://github.com/Abilash-22/OnlyMX/commit/37de91d10ef10f7d1e6e871e31cd54abda256635))
+
+### 🚀 Updated App Support
+
+* **adguard:** support v4.16.0 alongside v4.15.2 ([d93bd2d](https://github.com/Abilash-22/OnlyMX/commit/d93bd2d73d34a2f01938a2ff20bdf02ba1bbca49))
+* **cricfy:** support CRICFy TV 7.4 ([fa73617](https://github.com/Abilash-22/OnlyMX/commit/fa73617cc93b555dc374a301baa812aa9bb197c8))
+* **mx-player:** support MX Player 3.4.3 ([62e86fb](https://github.com/Abilash-22/OnlyMX/commit/62e86fba61b73b27322de29b8bd10eb33cbb0884))
+* **player:** hide playback controls on open and fullscreen ([bde2729](https://github.com/Abilash-22/OnlyMX/commit/bde272914e96fe0ea68e06d9331de35ccbe7206d))
+
+### 🔧 Improvements
+
+* simplify patch descriptions and collapse README patch lists ([8e6f3fd](https://github.com/Abilash-22/OnlyMX/commit/8e6f3fda2dfd5735b594df19d71123a90a009efd))
+
 ## [2.13.0](https://github.com/ginDoki19/GinArena-patch/compare/v2.12.1...v2.13.0) (2026-11-21)
 
 ### 🐛 Bug Fixes

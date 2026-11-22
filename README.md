@@ -38,7 +38,7 @@
 The bundle summary below is refreshed automatically by the release workflow.
 
 <!-- PATCHES_START -->
-> **[v2.13.0](https://github.com/ginDoki19/GinArena-patch/releases/tag/v2.13.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;42 patches total&nbsp;&nbsp;•&nbsp;&nbsp;**[⬇️ Download patches-2.13.0.mpp](https://github.com/ginDoki19/GinArena-patch/releases/download/v2.13.0/patches-2.13.0.mpp)**
+> **[v1.0.0](https://github.com/Abilash-22/OnlyMX/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;42 patches total&nbsp;&nbsp;•&nbsp;&nbsp;**[⬇️ Download patches-1.0.0.mpp](https://github.com/Abilash-22/OnlyMX/releases/download/v1.0.0/patches-1.0.0.mpp)**
 <details>
 <summary>📦 1DM&nbsp;&nbsp;•&nbsp;&nbsp;5 patches</summary>
 <br>
@@ -73,7 +73,7 @@ The bundle summary below is refreshed automatically by the release workflow.
 |----------|----------------|-----------|
 | [Clean Me page](#clean-me-page) | Removes Status Saver, Legal, and Help from the Me page. |  |
 | [Custom codec](#custom-codec) | Bundles an MX Player custom codec; official v3.1.0_r1 codecs are verified. | • Custom codec file<br>• Allow unverified codecs |
-| [Remove ads & bloat](#remove-ads--bloat) | Removes ads and online extras like Live TV, Tube, Shorts, and Games for a clean local player. |  |
+| [Remove ads & bloat](#remove-ads--bloat) | Removes ads and online extras like Live TV, Tube, Shorts, and Games while keeping Web Series. |  |
 | [Remove bottom navigation bar](#remove-bottom-navigation-bar) | Removes the bottom navigation bar and moves Me to the top-right corner. |  |
 
 </details>

@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.13.0",
+  "version": "1.0.0",
   "patches": [
     {
       "name": "AdBlocker turbo & userscript bundle",
@@ -1151,7 +1151,7 @@
     },
     {
       "name": "Remove ads & bloat",
-      "description": "Removes ads and online extras like Live TV, Tube, Shorts, and Games for a clean local player.",
+      "description": "Removes ads and online extras like Live TV, Tube, Shorts, and Games while keeping Web Series.",
       "default": true,
       "category": null,
       "compatiblePackages": [
