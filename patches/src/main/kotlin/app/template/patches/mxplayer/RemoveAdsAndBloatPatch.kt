@@ -17,7 +17,7 @@ import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 @Suppress("unused")
 val removeAdsAndBloatPatch = bytecodePatch(
     name = "Remove ads & bloat",
-    description = "Removes ads and online extras like Live TV, Tube, Shorts, and Games for a clean local player.",
+    description = "Removes ads and online extras like Live TV, Tube, Shorts, and Games while keeping Web Series.",
     default = true,
 ) {
     compatibleWith(COMPATIBILITY_MX_PLAYER_AD)
@@ -289,27 +289,27 @@ val removeAdsAndBloatPatch = bytecodePatch(
         }
 
         // =========================================================================
-        // 3. GlobalConfig Pure-Local Mode & Feature Gates
+        // 3. GlobalConfig Web Series Only Mode & Feature Gates
         // =========================================================================
         run {
             val gc = GlobalConfigClinitFingerprint.classDef
 
-            // Pure-local phone mode (`j -> true`, `C = !j -> false`) + Local Music (`B -> true`).
-            // Hardware/TV gates (`h`, `p(Context)`, `k`, `m`, `n`, `r`) remain untouched.
-            gc.returnBoolean(gc.requireMethod("j", "Z", emptyList()), true)
-            gc.returnBoolean(gc.requireMethod("C", "Z", emptyList()), false)
-            gc.returnBoolean(gc.requireMethod("B", "Z", emptyList()), true)
+            // Disable pure-local lock (`j -> false`, `C -> true`), keep Local Music (`B -> true`),
+            // enable India region (`i -> true`), main OTT Video tab (`F -> true`), and OTT downloads (`D -> true`).
+            gc.returnBoolean(gc.requireMethod("j", "Z", emptyList()), false) // isPureLocalPhone
+            gc.returnBoolean(gc.requireMethod("C", "Z", emptyList()), true)  // !isPureLocalPhone
+            gc.returnBoolean(gc.requireMethod("B", "Z", emptyList()), true)  // Local Music
+            gc.returnBoolean(gc.requireMethod("i", "Z", emptyList()), true)  // isIndia (required for Web Series catalog)
+            gc.returnBoolean(gc.requireMethod("F", "Z", emptyList()), true)  // onlineOpen (Web Series & Movies tab)
+            gc.returnBoolean(gc.requireMethod("D", "Z", emptyList()), true)  // ottDownloadOpen (offline episode downloads)
 
             val disabledGates = listOf(
-                "i", // isIndia
                 "o", // isSouthAsiaExIndia
-                "F", // onlineOpen (mxplay OTT streaming)
                 "y", // liveOpen (Live TV)
                 "A", // mxtubeOpen (MX Tube)
                 "w", // gameOpen (MX Games)
                 "v", // fatafatOpen (Shorts / Fatafat)
                 "E", // upcomingOpen
-                "D", // ottDownloadOpen
                 "t", // bazaarOpen
                 "u", // downloadOpen (social video saver promo)
                 "x", // secondary online tab gate
@@ -476,12 +476,9 @@ val removeAdsAndBloatPatch = bytecodePatch(
             attachMethod.removeInstructions(sp7CallIdx, 2)
             attachMethod.addInstructions(sp7CallIdx, "const/4 v$destReg, 0x0")
 
-            // 6c. `DefaultMultiTypeViewCache.a(ds4$a)V -> return-void`: stops `ActivityWelcomeMX.g5()` from
-            //     background-inflating 49 disabled OTT streaming card layouts + 10 OTT RecyclerViews and
-            //     posting 59 messages onto the Main UI Looper during launch and folder scrolling, while
-            //     keeping `ds4` and its `LayoutInflater` (`ds4.c`) non-null for `fvc.onCreateViewHolder`.
-            val ottViewCacheClass = OttViewPreinflateEnqueueFingerprint.classDef
-            ottViewCacheClass.returnVoid(OttViewPreinflateEnqueueFingerprint.method)
+            // 6c. Kept enabled so Web Series streaming cards and RecyclerViews pre-inflate smoothly.
+            // val ottViewCacheClass = OttViewPreinflateEnqueueFingerprint.classDef
+            // ottViewCacheClass.returnVoid(OttViewPreinflateEnqueueFingerprint.method)
 
             // 6d. `ANRWatchDog.run()V -> return-void`: skips startup `getHistoricalProcessExitReasons` IPC
             //     and background 3000ms main-thread ping polling.
@@ -499,12 +496,11 @@ val removeAdsAndBloatPatch = bytecodePatch(
                 """.trimIndent(),
             )
 
-            // 6f. Disarm `FeatureMan2` (`rq6.c(Application)V`) network fetch while keeping `FeatureMan1` (`qq6`)
-            //     intact so `pq6.m` remains initialized.
-            val featureMan2Class = FeatureMan2InitFingerprint.classDef
-            featureMan2Class.returnVoid(
-                featureMan2Class.requireMethod("c", "V", listOf("Landroid/app/Application;")),
-            )
+            // 6f. Kept enabled so Web Series remote feature configs remain intact.
+            // val featureMan2Class = FeatureMan2InitFingerprint.classDef
+            // featureMan2Class.returnVoid(
+            //     featureMan2Class.requireMethod("c", "V", listOf("Landroid/app/Application;")),
+            // )
 
             // 6g. Disarm `TrackerInitializer`, `App.X()`, `TrackingUtil` (`lvj`) static dispatchers,
             //     and `TrackingConst` (`Ldvj;`) lifecycle callbacks so 6 analytics pipelines
@@ -532,16 +528,16 @@ val removeAdsAndBloatPatch = bytecodePatch(
                 trackingLifecycleClass.requireMethod("onActivityResumed", "V", listOf("Landroid/app/Activity;")),
             )
 
-            // 6h. Disarm `App.t()` background bloat (`InAppPush` 5-second repeating timer, startup
-            //     `GetGroupDetailsWithCache` HTTP fetch, `ComScore` `Analytics.start` / UX pings, and
-            //     `CleverTap` `ActivityLifecycleCallback` on every Activity create/resume/pause)
-            //     while keeping `App.t()` itself intact for Network Stream (`jxk.a`) and Chromecast!
+            // 6h. Disarm `App.t()` background bloat (`InAppPush` 5-second repeating timer,
+            //     `ComScore` `Analytics.start` / UX pings, and `CleverTap` `ActivityLifecycleCallback`)
+            //     while keeping `GetGroupDetailsWithCache` enabled for Web Series catalog/access!
             val inAppPushClass = InAppPushRunFingerprint.classDef
             inAppPushClass.returnVoid(InAppPushRunFingerprint.method)
             inAppPushClass.returnVoid(inAppPushClass.requireMethod("c", "V", emptyList()))
 
-            val subGroupFetchClass = SubscriptionGroupFetchFingerprint.classDef
-            subGroupFetchClass.returnVoid(SubscriptionGroupFetchFingerprint.method)
+            // Kept enabled for Web Series content/subscription group fetching:
+            // val subGroupFetchClass = SubscriptionGroupFetchFingerprint.classDef
+            // subGroupFetchClass.returnVoid(SubscriptionGroupFetchFingerprint.method)
 
             val comScoreClass = ComScoreClinitFingerprint.classDef
             ComScoreClinitFingerprint.method.appendBeforeReturnVoid(
@@ -588,7 +584,6 @@ val removeAdsAndBloatPatch = bytecodePatch(
                 "Lcom/mxtech/videoplayer/ad/online/theme/ui/ThemeListViewModel\$",
                 "Lcom/mxtech/videoplayer/ad/push/a\$",
                 "Lcom/mxtech/videoplayer/ad/subscriptions/ui/GetGroupDetailsWithCache\$",
-                "${ottViewCacheClass.type.dropLast(1)}\$",
                 "${anrWatchDogClass.type.dropLast(1)}\$",
                 "${trackingUtilClass.type.dropLast(1)}\$",
                 "${comScoreClass.type.dropLast(1)}\$",
