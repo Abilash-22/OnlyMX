@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/Abilash-22/OnlyMX/compare/v1.0.0...v1.0.1) (2026-11-22)
+
+### 🐛 Bug Fixes
+
+* navigation ([103e72f](https://github.com/Abilash-22/OnlyMX/commit/103e72f2a4a7fdaf86dc5a8151e34c329b22bedd))
+
 ## 1.0.0 (2026-11-22)
 
 ### ⚠ BREAKING CHANGES
