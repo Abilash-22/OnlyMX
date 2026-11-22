@@ -436,6 +436,7 @@ val removeAdsAndBloatPatch = bytecodePatch(
 
             // =========================================================================
             // 6. Cold-Start, Theme-Switch & Runtime Smoothness Optimizations (3.4.1)
+            //    (Adjusted to preserve Web Series / OTT Video tab & PlayReady DRM)
             // =========================================================================
             // 6a. `SkinResourcePackHelper.a()V`: runs on every cold start and every theme `recreate()`;
             //     for `external_skin_local_classic_*`, stock fires an HTTP check for `"classic_..."` and
@@ -443,42 +444,14 @@ val removeAdsAndBloatPatch = bytecodePatch(
             val skinPackHelperClass = SkinResourcePackCheckFingerprint.classDef
             skinPackHelperClass.returnVoid(SkinResourcePackCheckFingerprint.method)
 
-            // 6b. `GdprUtil.a()Z -> true` (`isNotGDPRRegion()`) + surgical call-site override inside
-            //     `App.attachBaseContext`:
-            //     - Keeping `GdprUtil.a()` `true` globally preserves the 2-line fast path in
-            //       `ActivityWelcomeMX.u7()` (avoiding double `setContentView` splash flash + `sp7.h(true)`
-            //       `FirebaseAnalytics.getInstance` wakeup), skips `w27.e()`'s cold-start `sp7.d(...)`
-            //       call, and returns `false` on line 1 of `sp7.b(...)` in `ActivityScreen.onCreate`.
-            //     - Replacing ONLY the single `invoke-static {}, Lsp7;->a()Z` + `move-result vX` inside
-            //       `App.attachBaseContext` with `const/4 vX, 0x0` still routes `attachBaseContext` into
-            //       the lightweight 7-initializer fast path (skipping `AppsFlyer`, `FacebookSdk`,
-            //       `AccountKit`, `CleverTap`, and `Amazon PlayReady DRM`).
+            // 6b. `GdprUtil.a()Z -> true` (`isNotGDPRRegion()`):
+            //     Keep `GdprUtil.a()` `true` globally to avoid GDPR splash delays, while leaving
+            //     `App.attachBaseContext` intact so `AccountKit` and `Amazon PlayReady DRM` initialize
+            //     for Web Series playback.
             val gdprUtilClass = GdprForeignCheckFingerprint.classDef
-            val gdprUtilType = gdprUtilClass.type
-            val gdprMethodName = GdprForeignCheckFingerprint.method.name
             gdprUtilClass.returnBoolean(GdprForeignCheckFingerprint.method, true)
 
-            val attachMethod = AppAttachBaseContextFingerprint.method
-            val attachInsns = attachMethod.instructions.toList()
-            val sp7CallIdx = attachInsns.indexOfFirst { insn ->
-                insn.opcode == Opcode.INVOKE_STATIC &&
-                    ((insn as? ReferenceInstruction)?.reference as? MethodReference)?.let { ref ->
-                        ref.definingClass == gdprUtilType &&
-                            ref.name == gdprMethodName &&
-                            ref.parameterTypes.isEmpty() &&
-                            ref.returnType == "Z"
-                    } == true
-            }
-            if (sp7CallIdx < 0 || sp7CallIdx + 1 >= attachInsns.size || attachInsns[sp7CallIdx + 1].opcode != Opcode.MOVE_RESULT) {
-                throw PatchException("Expected Lsp7;->a()Z + move-result in App.attachBaseContext")
-            }
-            val destReg = (attachInsns[sp7CallIdx + 1] as OneRegisterInstruction).registerA
-            attachMethod.removeInstructions(sp7CallIdx, 2)
-            attachMethod.addInstructions(sp7CallIdx, "const/4 v$destReg, 0x0")
-
-            // 6c. Kept enabled so Web Series streaming cards and RecyclerViews pre-inflate smoothly.
-            // val ottViewCacheClass = OttViewPreinflateEnqueueFingerprint.classDef
-            // ottViewCacheClass.returnVoid(OttViewPreinflateEnqueueFingerprint.method)
+            // 6c. `DefaultMultiTypeViewCache` kept active so Web Series / OTT streaming cards render smoothly.
 
             // 6d. `ANRWatchDog.run()V -> return-void`: skips startup `getHistoricalProcessExitReasons` IPC
             //     and background 3000ms main-thread ping polling.
@@ -496,21 +469,13 @@ val removeAdsAndBloatPatch = bytecodePatch(
                 """.trimIndent(),
             )
 
-            // 6f. Kept enabled so Web Series remote feature configs remain intact.
-            // val featureMan2Class = FeatureMan2InitFingerprint.classDef
-            // featureMan2Class.returnVoid(
-            //     featureMan2Class.requireMethod("c", "V", listOf("Landroid/app/Application;")),
-            // )
+            // 6f. `FeatureMan2` kept active so remote OTT Video tab & catalog configs load properly.
 
-            // 6g. Disarm `TrackerInitializer`, `App.X()`, `TrackingUtil` (`lvj`) static dispatchers,
-            //     and `TrackingConst` (`Ldvj;`) lifecycle callbacks so 6 analytics pipelines
-            //     (`evt.mxplay.com`, `falcon`, `search/tracking`, `gaana`, Firebase, Facebook) never
-            //     boot on startup, every scroll/click telemetry call is a 0-alloc no-op, and
-            //     `onActivityStopped` never blocks the Main Thread on `ActivityManager.getRunningAppProcesses()`.
+            // 6g. Disarm `TrackerInitializer`, `TrackingUtil` (`lvj`) static dispatchers, and
+            //     `TrackingConst` (`Ldvj;`) lifecycle callbacks while keeping `App.X()` intact so
+            //     core MX online session & bottom-bar OTT tab registration runs on startup.
             val trackerInitClass = TrackerInitializerFingerprint.classDef
             trackerInitClass.returnVoid(TrackerInitializerFingerprint.method)
-            val mxAppClass = MxAppInitTrackingFingerprint.classDef
-            mxAppClass.returnVoid(MxAppInitTrackingFingerprint.method)
             val trackingUtilClass = TrackingUtilClinitFingerprint.classDef
             trackingUtilClass.methods
                 .filter {
@@ -528,16 +493,12 @@ val removeAdsAndBloatPatch = bytecodePatch(
                 trackingLifecycleClass.requireMethod("onActivityResumed", "V", listOf("Landroid/app/Activity;")),
             )
 
-            // 6h. Disarm `App.t()` background bloat (`InAppPush` 5-second repeating timer,
-            //     `ComScore` `Analytics.start` / UX pings, and `CleverTap` `ActivityLifecycleCallback`)
-            //     while keeping `GetGroupDetailsWithCache` enabled for Web Series catalog/access!
+            // 6h. Disarm `App.t()` background bloat (`InAppPush` 5-second repeating timer, `ComScore`
+            //     `Analytics.start` / UX pings, and `CleverTap` `ActivityLifecycleCallback`) while
+            //     keeping `GetGroupDetailsWithCache`, Network Stream (`jxk.a`), and Chromecast intact!
             val inAppPushClass = InAppPushRunFingerprint.classDef
             inAppPushClass.returnVoid(InAppPushRunFingerprint.method)
             inAppPushClass.returnVoid(inAppPushClass.requireMethod("c", "V", emptyList()))
-
-            // Kept enabled for Web Series content/subscription group fetching:
-            // val subGroupFetchClass = SubscriptionGroupFetchFingerprint.classDef
-            // subGroupFetchClass.returnVoid(SubscriptionGroupFetchFingerprint.method)
 
             val comScoreClass = ComScoreClinitFingerprint.classDef
             ComScoreClinitFingerprint.method.appendBeforeReturnVoid(
